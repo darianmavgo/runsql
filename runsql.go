@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
@@ -10,7 +13,13 @@ import (
 
 func main() {
 	// dbPath := "file:/Users/darianhickman/Documents/wc_study/history.db?cache=shared"
-	dbPath := "file:/Users/darianhickman/Documents/wc_study/history.db"
+	// dbPath := "file:/Users/darianhickman/Documents/wc_study/history.db"
+	dbPath, err := filepath.Abs(os.Args[1])
+	if err != nil {
+		log.Fatal("Failed db string ", os.Args[1], err)
+	}
+	log.Print("db ", dbPath)
+
 	db := sqlx.MustConnect("sqlite3", dbPath)
 	defer db.Close()
 	// db.SetMaxOpenConns(1)
