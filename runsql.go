@@ -49,7 +49,12 @@ func main() {
 
 	for _, file := range files {
 
-		println(file[len(file)-80:])
+		if len(file) > 80 {
+			println(file[len(file)-80:])
+		} else {
+			println(file)
+		}
+
 		sqlScript, err := ioutil.ReadFile(file)
 		if err != nil {
 			println("reading script file failed\n", file)
