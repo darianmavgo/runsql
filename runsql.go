@@ -10,7 +10,7 @@ import (
 
 func main() {
 	// dbPath := "file:/Users/darianhickman/Documents/wc_study/history.db?cache=shared"
-	// dbPath := "file:/Users/darianhickman/Documents/wc_study/history.db"
+	dbPath := "file:/Users/darianhickman/Documents/wc_study/history.db"
 	db := sqlx.MustConnect("sqlite3", dbPath)
 	defer db.Close()
 	// db.SetMaxOpenConns(1)
