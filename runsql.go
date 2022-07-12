@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -25,7 +26,7 @@ func main() {
 	// db.SetMaxOpenConns(1)
 
 	// qry := `select list_folder||'/'|| sql_file as script from run_list where 'order' > 0 ORDER BY 'order'; `
-	qry := `select list_folder||'/'|| sql_file as script from run_list 
+	qry := `select list_folder||'/'|| sql_file as script, run_order from run_list 
 	where run_order > 0 
 	ORDER BY run_order;`
 
@@ -35,36 +36,38 @@ func main() {
 	}
 	defer scripts.Close()
 	var files []string
+	var orders []int
 	var file string
-
+	var run_order int
 	// Giving up on executing sql scripts while reading the query of scripts.
 	for scripts.Next() {
-		err = scripts.Scan(&file)
+		err = scripts.Scan(&file, &run_order)
 		if err != nil {
 			println(err)
 		} else {
 			files = append(files, file)
+			orders = append(orders, run_order)
 		}
 	}
 
-	for _, file := range files {
-
+	for idx, file := range files {
+		log.Print(orders[idx], " ")
 		if len(file) > 80 {
-			println(file[len(file)-80:])
+			println(idx, file[len(file)-80:])
 		} else {
-			println(file)
+			println(idx, file)
 		}
 
 		sqlScript, err := ioutil.ReadFile(file)
 		if err != nil {
 			println("reading script file failed\n", file)
 		}
-		if _, err := db.Exec(string(sqlScript)); err != nil {
+		if result, err := db.Exec(string(sqlScript)); err != nil {
 			fmt.Println(string(sqlScript[:80]))
 			fmt.Println(err)
 
 		} else {
-			fmt.Println("Success ", string(sqlScript[:80]))
+			spew.Dump(result)
 		}
 	}
 
