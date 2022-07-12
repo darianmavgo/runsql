@@ -67,7 +67,7 @@ func main() {
 			fmt.Println(err)
 
 		} else {
-			spew.Dump(result)
+			log.Println(spew.Sdump(result))
 		}
 	}
 
