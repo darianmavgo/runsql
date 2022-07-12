@@ -7,14 +7,12 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
-	// dbPath := "file:/Users/darianhickman/Documents/wc_study/history.db?cache=shared"
-	// dbPath := "file:/Users/darianhickman/Documents/wc_study/history.db"
+
 	dbPath, err := filepath.Abs(os.Args[1])
 	if err != nil {
 		log.Fatal("Failed db string ", os.Args[1], err)
@@ -23,7 +21,6 @@ func main() {
 
 	db := sqlx.MustConnect("sqlite3", dbPath)
 	defer db.Close()
-	// db.SetMaxOpenConns(1)
 
 	// qry := `select list_folder||'/'|| sql_file as script from run_list where 'order' > 0 ORDER BY 'order'; `
 	qry := `select list_folder||'/'|| sql_file as script, run_order from run_list 
@@ -67,7 +64,7 @@ func main() {
 			fmt.Println(err)
 
 		} else {
-			log.Println(spew.Sdump(result))
+			log.Println(result.LastInsertId())
 		}
 	}
 
