@@ -64,11 +64,7 @@ func main() {
 			fmt.Println(err)
 
 		} else {
-<<<<<<< HEAD
-			log.Print(result.LastInsertId())
-=======
 			log.Println(result.LastInsertId())
->>>>>>> 9a97a7e8ae9e8fe393b55a4b04d7a45d4061412a
 		}
 	}
 
