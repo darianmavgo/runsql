@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -10,6 +9,9 @@ import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 )
+
+// #run a script to clean for next run.
+// func clean_run(script)
 
 func main() {
 
@@ -56,12 +58,15 @@ func main() {
 		}
 
 		sqlScript, err := ioutil.ReadFile(file)
+		// cmd := `sqlite3 ` + dbPath + ` ".read ` + file + `"`
+		// result, err := db.Exec(cmd)
+		// result, err := exec.Command(cmd).Output()
 		if err != nil {
-			println("reading script file failed\n", file)
+			log.Println("Fail: ", file, err)
 		}
 		if result, err := db.Exec(string(sqlScript)); err != nil {
-			fmt.Println(string(sqlScript[:80]))
-			fmt.Println(err)
+			log.Println(string(sqlScript[:80]))
+			log.Println(err)
 
 		} else {
 			log.Println(result.LastInsertId())
