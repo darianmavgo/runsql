@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -67,7 +66,7 @@ func main() {
 			fmt.Println(err)
 
 		} else {
-			spew.Dump(result)
+			log.Print(result.LastInsertId())
 		}
 	}
 
