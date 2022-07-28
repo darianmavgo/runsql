@@ -61,9 +61,12 @@ func main() {
 	if err != nil {
 		log.Fatalln(`Couldnot create path`, err, c.loadtablepath)
 	}
+
 	log.Println("loadDbPath ", loadDbPath)
 
 	target_db := sqlx.MustConnect("sqlite3", loadDbPath)
+	defer target_db.Close()
+
 	for idx, file := range files {
 		log.Print(orders[idx], " ")
 		if len(file) > 80 {
